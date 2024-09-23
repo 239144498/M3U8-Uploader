@@ -5,8 +5,6 @@ import json
 import shutil
 import requests
 import threading
-import hashlib
-import boto3
 
 from loguru import logger
 from Crypto.Cipher import AES
@@ -14,7 +12,6 @@ from Crypto.Util.Padding import unpad
 from base64 import b64decode, b64encode
 from urllib.parse import urljoin, unquote
 from concurrent.futures import ThreadPoolExecutor
-from botocore.config import Config
 
 requests.packages.urllib3.disable_warnings()
 prefix = b64decode("R0lGODlhAQABAAAAACwAAAAAAQABAAAC".encode())
