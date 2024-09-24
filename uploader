@@ -14,7 +14,7 @@ from urllib.parse import urljoin, unquote
 from concurrent.futures import ThreadPoolExecutor
 
 requests.packages.urllib3.disable_warnings()
-prefix = b64decode("R0lGODlhAQABAAAAACwAAAAAAQABAAAC".encode())
+prefix = b64decode("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7".encode())
 prefixsize = len(prefix)
 lock = threading.Lock()
 
