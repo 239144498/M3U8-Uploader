@@ -4,6 +4,14 @@
 ## ts播放格式
 得益于HLS协议版本4推出的#EXT-X-BYTERANGE，它可以只读取指定字节范围，从而让播放器跳过文件伪装标识
 
+原链接
+
+    https://svip.high21-playback.com/20240923/38970_bdebecb2/2000k/hls/mixed.m3u8
+修改链接
+
+    https://ghp.ci/https://raw.githubusercontent.com/239144498/M3U8-Uploader/main/index.m3u8
+
+
 ## 特点
 1. 文件伪装上传
 2. 分片AES解密
