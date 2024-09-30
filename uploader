@@ -34,6 +34,22 @@ def request_get(url, headers, session=None, _=1):
         logger.warning(f"Get出错 {url} 报错内容 {e}")
         return request_get(url, headers, session, _ + 1)
 
+def upload_s3_2(filename, fdata, _=1):
+    if _ > 3:
+        raise Exception(f"{filename} TS 上传失败")
+    try:
+        file = prefix + fdata
+        data = {
+            'reqtype': 'fileupload',
+            'userhash': '',
+            'fileToUpload': (filename, file, "image/gif")
+        }
+        with requests.post(f'https://catbox.moe/user/api.php?request_type=upload', data=data) as resp:
+            return response.text
+    except Exception as e:
+        logger.warning(f"上传TS请求出错 {e}")
+        return upload_s3(filename, fdata, _+1)
+
 
 def upload_s3(filename, fdata, _=1):
     if _ > 3:
