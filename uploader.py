@@ -1,4 +1,5 @@
 import os
+import random
 import time
 import re
 import json
@@ -34,24 +35,8 @@ def request_get(url, headers, session=None, _=1):
         logger.warning(f"Get出错 {url} 报错内容 {e}")
         return request_get(url, headers, session, _ + 1)
 
-def upload_s3_2(filename, fdata, _=1):
-    if _ > 3:
-        raise Exception(f"{filename} TS 上传失败")
-    try:
-        file = prefix + fdata
-        data = {
-            'reqtype': 'fileupload',
-            'userhash': '',
-            'fileToUpload': (filename, file, "image/gif")
-        }
-        with requests.post(f'https://catbox.moe/user/api.php?request_type=upload', data=data) as resp:
-            return response.text
-    except Exception as e:
-        logger.warning(f"上传TS请求出错 {e}")
-        return upload_s3(filename, fdata, _+1)
 
-
-def upload_s3(filename, fdata, _=1):
+def upload1(filename, fdata, _=1):
     if _ > 3:
         raise Exception(f"{filename} TS 上传失败")
     file = prefix + fdata
@@ -69,7 +54,96 @@ def upload_s3(filename, fdata, _=1):
         return data["url"]
     except Exception as e:
         logger.warning(f"上传TS请求出错 {e}")
-        return upload_s3(filename, fdata, _+1)
+        return upload1(filename, fdata, _+1)
+
+
+def upload2(filename, fdata, _=1):
+    url = "https://api.vviptuangou.com/api/upload"
+    headers = {
+        'Accept': 'application/json, text/javascript, */*; q=0.01',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7',
+        'Sign': 'e346dedcb06bace9cd7ccc6688dd7ca1',
+        'Token': 'b3bc3a220db6317d4a08284c6119d136',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'
+
+    }
+    file = prefix + fdata     # size < 50MB
+    data = {"file": (f"{int(time.time())}.gif", file, "image/gif")}
+    try:
+        with requests.post(url=url, headers=headers, files=data) as resp:
+            data = resp.json()
+        return f"https://assets.vviptuangou.com/{data['imgurl']}"
+    except Exception as e:
+        logger.warning(f"上传TS请求出错 {e}")
+        return upload2(filename, fdata, _+1)
+
+
+def upload3(filename, fdata, _=1):
+    url = "https://api.da8m.cn/api/upload"
+    headers = {
+        'Accept': 'application/json, text/javascript, */*; q=0.01',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7',
+        'Sign': 'e346dedcb06bace9cd7ccc6688dd7ca1',
+        'Token': '4ca04a3ff8ca3b8f0f8cfa01899ddf8e',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'
+    }
+    file = prefix + fdata     # size < 50MB
+    data = {"file": (f"{int(time.time())}.gif", file, "image/gif")}
+    try:
+        with requests.post(url=url, headers=headers, files=data) as resp:
+            data = resp.json()
+        return f"https://assets.da8m.cn/{data['imgurl']}"
+    except Exception as e:
+        logger.warning(f"上传TS请求出错 {e}")
+        return upload3(filename, fdata, _+1)
+
+
+def upload4(filename, fdata, _=1):
+    url = "https://api.qst8.cn/api/front/upload/img"
+    headers ={
+        'Accept': 'application/json, text/javascript, */*; q=0.01',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7',
+        'Branchid': '1002',
+        'Cache-Control': 'no-cache',
+        'DNT': '1',
+        'Pragma': 'no-cache',
+        'Priority': 'u=1, i',
+        'Sec-Ch-Ua': '"Chromium";v="128", "Not;A=Brand";v="24", "Google Chrome";v="128"',
+        'Sec-Ch-Ua-Mobile': '?0',
+        'Sec-Ch-Ua-Platform': '"Windows"',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'cross-site',
+        'Sign': 'e346dedcb06bace9cd7ccc6688dd7ca1',
+        'Source': 'h5',
+        'Tenantid': '3',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'
+    }
+    file = prefix + fdata     # size < 5MB
+    data = {"file": (f"{int(time.time())}.gif", file, "image/gif")}
+    try:
+        with requests.post(url=url, headers=headers, files=data) as resp:
+            data = resp.json()
+        return resp.json()['data']
+    except Exception as e:
+        logger.warning(f"上传TS请求出错 {e}")
+        return upload4(filename, fdata, _+1)
+
+def upload5(filename, fdata, _=1):
+    if _ > 3:
+        raise Exception(f"{filename} TS 上传失败")
+    try:
+        file = prefix + fdata
+        data = {
+            'reqtype': 'fileupload',
+            'userhash': '',
+            'fileToUpload': (filename, file, "image/gif")
+        }
+        with requests.post(f'https://catbox.moe/user/api.php?request_type=upload', data=data) as resp:
+            return resp.text
+    except Exception as e:
+        logger.warning(f"上传TS请求出错 {e}")
+        return upload5(filename, fdata, _+1)
 
 
 class Down:
@@ -82,6 +156,7 @@ class Down:
             "iv": b"",
             "ts": [],
         }
+        self.upload_s3 = [upload1, upload2, upload3, upload4, upload5]
 
     def load_m3u8(self, url=None):
         m3u8link = url or self.vinfo["m3u8link"]
@@ -143,7 +218,7 @@ class Down:
         decrypted_ts = self.decrypt_ts(content)  # 解密
         filesize = len(decrypted_ts)
         logger.info(f'TS{index} Saving to URL')
-        s3_ts_url = upload_s3(f"{index}.ts", decrypted_ts)  # 上传
+        s3_ts_url = random.choice(self.upload_s3)(f"{index}.ts", decrypted_ts)  # 上传 + 负载均衡
         with lock:
             handle.write(f"{index}@@{filesize}@@{s3_ts_url}\n")  # 写入记录
         return index
