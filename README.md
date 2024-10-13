@@ -17,5 +17,6 @@
 2. 分片AES解密
 3. 断点续传
 4. 网络出错重连
+5. 服务负载均衡
 
 ![截图_20240923233206](https://github.com/user-attachments/assets/42b9d16d-1787-4390-848c-bf932eabb85e)
